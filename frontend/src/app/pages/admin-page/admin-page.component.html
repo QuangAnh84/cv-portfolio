@@ -1,0 +1,202 @@
+<div class="w3-content w3-margin-top" style="max-width: 1400px">
+  <div class="w3-row-padding">
+    <div class="w3-col l4 m12 s12">
+      <div class="w3-card w3-white w3-padding">
+        <h3 class="w3-margin-top">Admin login</h3>
+        <p class="w3-small w3-text-grey">
+          Used for saving changes. Default backend credentials are <b>admin/admin</b>.
+        </p>
+
+        <label class="w3-text-grey"><b>Username</b></label>
+        <input
+          class="w3-input w3-border w3-margin-bottom"
+          [value]="authUsername()"
+          (input)="authUsername.set(($any($event.target).value ?? '').toString())"
+        />
+
+        <label class="w3-text-grey"><b>Password</b></label>
+        <input
+          class="w3-input w3-border w3-margin-bottom"
+          type="password"
+          [value]="authPassword()"
+          (input)="authPassword.set(($any($event.target).value ?? '').toString())"
+        />
+
+        <div class="w3-bar">
+          <button class="w3-button w3-teal w3-bar-item" (click)="setAuth()">Save credentials</button>
+          <button class="w3-button w3-light-grey w3-bar-item" (click)="clearAuth()">Clear</button>
+        </div>
+      </div>
+
+      <div class="w3-card w3-white w3-padding w3-margin-top">
+        <h3 class="w3-margin-top">Actions</h3>
+        <button class="w3-button w3-teal w3-block" (click)="load()" [disabled]="loading() || saving()">
+          Reload from server
+        </button>
+        <button class="w3-button w3-blue-grey w3-block w3-margin-top" (click)="save()" [disabled]="loading() || saving()">
+          @if (saving()) { Saving… } @else { Save CV }
+        </button>
+      </div>
+
+      @if (message()) {
+        <div class="w3-panel w3-pale-green w3-card-4 w3-margin-top">
+          {{ message() }}
+        </div>
+      }
+      @if (error()) {
+        <div class="w3-panel w3-pale-red w3-card-4 w3-margin-top">
+          {{ error() }}
+        </div>
+      }
+    </div>
+
+    <div class="w3-col l8 m12 s12">
+      <div class="w3-card w3-white w3-padding">
+        <h2 class="w3-margin-top">Edit your CV</h2>
+
+        @if (loading()) {
+          <div class="w3-panel w3-padding w3-light-grey">Loading…</div>
+        } @else {
+          <form [formGroup]="form" class="admin-form">
+            <h3>Profile</h3>
+            <div formGroupName="profile" class="grid">
+              <div>
+                <label><b>Full name</b></label>
+                <input class="w3-input w3-border" formControlName="fullName" />
+              </div>
+              <div>
+                <label><b>Headline</b></label>
+                <input class="w3-input w3-border" formControlName="headline" />
+              </div>
+              <div>
+                <label><b>Location</b></label>
+                <input class="w3-input w3-border" formControlName="location" />
+              </div>
+              <div>
+                <label><b>Email</b></label>
+                <input class="w3-input w3-border" formControlName="email" />
+              </div>
+              <div>
+                <label><b>Phone</b></label>
+                <input class="w3-input w3-border" formControlName="phone" />
+              </div>
+              <div>
+                <label><b>Avatar URL</b></label>
+                <input class="w3-input w3-border" formControlName="avatarUrl" />
+              </div>
+            </div>
+
+            <h3 class="section">Skills</h3>
+            <button type="button" class="w3-button w3-teal w3-small" (click)="addSkill()">Add skill</button>
+            <div formArrayName="skills" class="list">
+              @for (ctrl of skills.controls; track $index) {
+                <div class="row w3-border w3-round w3-padding">
+                  <div class="grow" [formGroupName]="$index">
+                    <div class="grid2">
+                      <input class="w3-input w3-border" placeholder="Skill name" formControlName="name" />
+                      <input class="w3-input w3-border" type="number" min="0" max="100" formControlName="percent" />
+                    </div>
+                  </div>
+                  <button type="button" class="w3-button w3-light-grey" (click)="removeSkill($index)">Remove</button>
+                </div>
+              }
+            </div>
+
+            <h3 class="section">Languages</h3>
+            <button type="button" class="w3-button w3-teal w3-small" (click)="addLanguage()">Add language</button>
+            <div formArrayName="languages" class="list">
+              @for (ctrl of languages.controls; track $index) {
+                <div class="row w3-border w3-round w3-padding">
+                  <div class="grow" [formGroupName]="$index">
+                    <div class="grid2">
+                      <input class="w3-input w3-border" placeholder="Language name" formControlName="name" />
+                      <input class="w3-input w3-border" type="number" min="0" max="100" formControlName="percent" />
+                    </div>
+                  </div>
+                  <button type="button" class="w3-button w3-light-grey" (click)="removeLanguage($index)">Remove</button>
+                </div>
+              }
+            </div>
+
+            <h3 class="section">Work experience</h3>
+            <button type="button" class="w3-button w3-teal w3-small" (click)="addWork()">Add work</button>
+            <div formArrayName="workExperience" class="list">
+              @for (ctrl of workExperience.controls; track $index) {
+                <div class="w3-border w3-round w3-padding w3-margin-bottom" [formGroupName]="$index">
+                  <div class="grid">
+                    <div>
+                      <label><b>Title</b></label>
+                      <input class="w3-input w3-border" formControlName="title" />
+                    </div>
+                    <div>
+                      <label><b>Company</b></label>
+                      <input class="w3-input w3-border" formControlName="company" />
+                    </div>
+                    <div>
+                      <label><b>From</b></label>
+                      <input class="w3-input w3-border" formControlName="from" />
+                    </div>
+                    <div>
+                      <label><b>To</b></label>
+                      <input class="w3-input w3-border" formControlName="to" />
+                    </div>
+                    <div class="full">
+                      <label><b>Details</b></label>
+                      <textarea class="w3-input w3-border" rows="3" formControlName="details"></textarea>
+                    </div>
+                  </div>
+                  <button type="button" class="w3-button w3-light-grey" (click)="removeWork($index)">Remove</button>
+                </div>
+              }
+            </div>
+
+            <h3 class="section">Education</h3>
+            <button type="button" class="w3-button w3-teal w3-small" (click)="addEducation()">Add education</button>
+            <div formArrayName="education" class="list">
+              @for (ctrl of education.controls; track $index) {
+                <div class="w3-border w3-round w3-padding w3-margin-bottom" [formGroupName]="$index">
+                  <div class="grid">
+                    <div>
+                      <label><b>School</b></label>
+                      <input class="w3-input w3-border" formControlName="school" />
+                    </div>
+                    <div>
+                      <label><b>From</b></label>
+                      <input class="w3-input w3-border" formControlName="from" />
+                    </div>
+                    <div>
+                      <label><b>To</b></label>
+                      <input class="w3-input w3-border" formControlName="to" />
+                    </div>
+                    <div class="full">
+                      <label><b>Details</b></label>
+                      <textarea class="w3-input w3-border" rows="2" formControlName="details"></textarea>
+                    </div>
+                  </div>
+                  <button type="button" class="w3-button w3-light-grey" (click)="removeEducation($index)">Remove</button>
+                </div>
+              }
+            </div>
+
+            <h3 class="section">Social links</h3>
+            <div formGroupName="social" class="grid">
+              <div>
+                <label><b>Twitter URL</b></label>
+                <input class="w3-input w3-border" formControlName="twitter" />
+              </div>
+              <div>
+                <label><b>LinkedIn URL</b></label>
+                <input class="w3-input w3-border" formControlName="linkedin" />
+              </div>
+              <div>
+                <label><b>GitHub URL</b></label>
+                <input class="w3-input w3-border" formControlName="github" />
+              </div>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+

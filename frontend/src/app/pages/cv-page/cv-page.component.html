@@ -1,0 +1,120 @@
+<div class="w3-content w3-margin-top" style="max-width: 1400px">
+  @if (cv(); as data) {
+    <div class="w3-row-padding">
+      <!-- Left Column -->
+      <div class="w3-third">
+        <div class="w3-white w3-text-grey w3-card-4">
+          <div class="w3-display-container">
+            <img [src]="data.profile.avatarUrl" alt="Avatar" style="width: 100%" />
+            <div class="w3-display-bottomleft w3-container w3-text-black">
+              <h2>{{ data.profile.fullName }}</h2>
+            </div>
+          </div>
+          <div class="w3-container">
+            <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>{{ data.profile.headline }}</p>
+            <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>{{ data.profile.location }}</p>
+            <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>{{ data.profile.email }}</p>
+            <p><i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i>{{ data.profile.phone }}</p>
+            <hr />
+
+            <p class="w3-large">
+              <b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b>
+            </p>
+            @for (s of data.skills; track s.name) {
+              <p>{{ s.name }}</p>
+              <div class="w3-light-grey w3-round-xlarge w3-small">
+                <div class="w3-container w3-center w3-round-xlarge w3-teal" [style.width.%]="s.percent">
+                  {{ s.percent }}%
+                </div>
+              </div>
+            }
+            <br />
+
+            <p class="w3-large w3-text-theme">
+              <b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b>
+            </p>
+            @for (l of data.languages; track l.name) {
+              <p>{{ l.name }}</p>
+              <div class="w3-light-grey w3-round-xlarge">
+                <div class="w3-round-xlarge w3-teal" style="height: 24px" [style.width.%]="l.percent"></div>
+              </div>
+            }
+            <br />
+          </div>
+        </div>
+        <br />
+      </div>
+
+      <!-- Right Column -->
+      <div class="w3-twothird">
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+          <h2 class="w3-text-grey w3-padding-16">
+            <i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience
+          </h2>
+          @for (w of data.workExperience; track w.title + w.company + w.from) {
+            <div class="w3-container">
+              <h5 class="w3-opacity"><b>{{ w.title }} / {{ w.company }}</b></h5>
+              <h6 class="w3-text-teal">
+                <i class="fa fa-calendar fa-fw w3-margin-right"></i>{{ w.from }} -
+                @if (w.to === 'Current') {
+                  <span class="w3-tag w3-teal w3-round">Current</span>
+                } @else {
+                  {{ w.to }}
+                }
+              </h6>
+              <p>{{ w.details }}</p>
+              <hr />
+            </div>
+          }
+        </div>
+
+        <div class="w3-container w3-card w3-white">
+          <h2 class="w3-text-grey w3-padding-16">
+            <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education
+          </h2>
+          @for (e of data.education; track e.school + e.from) {
+            <div class="w3-container">
+              <h5 class="w3-opacity"><b>{{ e.school }}</b></h5>
+              <h6 class="w3-text-teal">
+                <i class="fa fa-calendar fa-fw w3-margin-right"></i>{{ e.from }}@if (e.to) { - {{ e.to }} }
+              </h6>
+              <p>{{ e.details }}</p>
+              <hr />
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <footer class="w3-container w3-teal w3-center w3-margin-top">
+      <p>Find me on social media.</p>
+      @if (data.social.twitter) {
+        <a class="w3-hover-opacity" [href]="data.social.twitter" target="_blank" rel="noopener">
+          <i class="fa fa-twitter"></i>
+        </a>
+      }
+      @if (data.social.linkedin) {
+        <a class="w3-hover-opacity" [href]="data.social.linkedin" target="_blank" rel="noopener">
+          <i class="fa fa-linkedin"></i>
+        </a>
+      }
+      @if (data.social.github) {
+        <a class="w3-hover-opacity" [href]="data.social.github" target="_blank" rel="noopener">
+          <i class="fa fa-github"></i>
+        </a>
+      }
+      <p class="w3-small">
+        Powered by <a href="https://www.w3schools.com/w3css/" target="_blank" rel="noopener">w3.css</a>
+      </p>
+    </footer>
+  } @else if (loading()) {
+    <div class="w3-panel w3-padding w3-white w3-card-4">Loading…</div>
+  } @else if (error()) {
+    <div class="w3-panel w3-padding w3-pale-red w3-card-4">
+      <b>Error:</b> {{ error() }}
+    </div>
+  } @else {
+    <div class="w3-panel w3-padding w3-white w3-card-4">No CV data.</div>
+  }
+</div>
+

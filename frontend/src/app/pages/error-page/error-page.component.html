@@ -1,0 +1,30 @@
+<div class="w3-content w3-margin-top" style="max-width: 900px">
+  <div class="w3-card w3-white w3-padding-32 w3-center">
+    <div class="icon w3-text-teal">
+      <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    </div>
+
+    <h2 class="w3-text-grey w3-margin-top">Service error</h2>
+
+    @if (status()) {
+      <div class="w3-text-grey w3-small w3-margin-top">HTTP {{ status() }}</div>
+    }
+
+    <p class="w3-text-grey w3-margin-top">
+      {{ message() }}
+    </p>
+
+    @if (url()) {
+      <p class="w3-small w3-text-grey w3-margin-top">
+        Request: <code class="code">{{ url() }}</code>
+      </p>
+    }
+
+    <div class="w3-margin-top actions">
+      <button class="w3-button w3-teal w3-round" (click)="goBack()">Go back</button>
+      <button class="w3-button w3-light-grey w3-round" (click)="reload()">Reload</button>
+      <a class="w3-button w3-blue-grey w3-round" routerLink="/cv">Home</a>
+    </div>
+  </div>
+</div>
+
