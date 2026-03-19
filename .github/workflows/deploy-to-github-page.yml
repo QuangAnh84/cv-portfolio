@@ -9,11 +9,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
 
     steps:
       - name: Checkout
@@ -32,9 +27,9 @@ jobs:
         working-directory: ./frontend
         run: npm run build -- --base-href=/cv-portfolio/
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/dist/frontend
-          force_orphan: true
+          folder: frontend/dist/frontend
+          branch: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
