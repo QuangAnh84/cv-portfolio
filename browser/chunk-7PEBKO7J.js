@@ -1,0 +1,1 @@
+import{L as e,Q as i,vb as o}from"./chunk-7GTUZBVW.js";var a=class t{constructor(r){this.http=r}baseUrl="http://localhost:8080/api";getCv(){return this.http.get(`${this.baseUrl}/cv`)}saveCv(r){return this.http.put(`${this.baseUrl}/admin/cv`,r)}static \u0275fac=function(p){return new(p||t)(i(o))};static \u0275prov=e({token:t,factory:t.\u0275fac,providedIn:"root"})};export{a};
