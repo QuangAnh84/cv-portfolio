@@ -6,7 +6,7 @@ COPY backend/src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM eclipse-temurin:17-jdk-slim
+FROM eclipse-temurin:17-jdk-jammy
 WORKDIR /app
 COPY --from=builder /app/target/portfolio-backend-0.1.0.jar app.jar
 EXPOSE 8080
