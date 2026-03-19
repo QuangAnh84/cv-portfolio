@@ -1,17 +1,13 @@
-# Dockerfile for Java Backend
-
-# Use an official Java runtime as a parent image
-FROM openjdk:11-jre-slim
-
-# Set the working directory
+# Build stage
+FROM maven:3.9-eclipse-temurin-17 AS builder
 WORKDIR /app
-
-# Copy the local pom.xml and source code
-COPY pom.xml .
-COPY src ./src
-
-# Build the Maven project
+COPY backend/pom.xml .
+COPY backend/src ./src
 RUN mvn clean package -DskipTests
 
-# Set the command to run the application
-CMD ["java", "-jar", "target/your-application.jar"]
+# Runtime stage
+FROM eclipse-temurin:17-jdk-slim
+WORKDIR /app
+COPY --from=builder /app/target/portfolio-backend-0.1.0.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-Dserver.port=8080", "-jar", "app.jar"]
