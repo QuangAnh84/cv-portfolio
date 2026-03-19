@@ -1,6 +1,7 @@
 package com.example.portfolio.cv;
 
 import java.util.List;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +53,12 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of(allowedOrigins));
+    List<String> origins =
+        Stream.of(allowedOrigins.split(","))
+            .map(String::trim)
+            .filter(s -> !s.isBlank())
+            .toList();
+    config.setAllowedOrigins(origins);
     config.setAllowedMethods(List.of("GET", "PUT", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
     config.setAllowCredentials(true);

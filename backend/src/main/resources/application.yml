@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   datasource:
@@ -20,7 +20,7 @@ spring:
 
 app:
   cors:
-    allowed-origins: "http://localhost:4200"
+    allowed-origins: "http://localhost:4200,https://quanganh84.github.io"
   admin:
     username: admin
     password: admin
